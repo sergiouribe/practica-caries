@@ -1,0 +1,75 @@
+---
+title: "Análisis exploratorio de datos para odontología"
+output: html_notebook
+---
+
+# Paquetes
+```{r}
+library(tidyverse)
+library(table1)
+
+```
+
+# Importar datos
+
+Convertir a csv e importarlo
+```{r}
+df <- read_csv("caries.csv")
+```
+Importar directamente desde excel
+```{r}
+df <- readxl::read_xls("caries.xls", sheet = 1)
+```
+
+Leer desde un sitio web
+
+```{r}
+df <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vStv7Pr69DtRKv6Nw6gVBep8hbT3pEeO6B1vNwxK_1DUHgpoTgbuRpZ4SvgtHFQnBZJVGeeQVyRuXZl/pub?gid=1416215037&single=true&output=csv")
+```
+
+# Explorar los datos
+
+```{r}
+names(df)
+```
+
+
+```{r}
+str(df)
+```
+## ver datos NA
+### Alternativa 1 para ver los NA
+```{r}
+sum(is.na(df))
+```
+hay dos datos NA
+```{r}
+which(is.na(df))
+```
+
+accedemos a esos datos
+```{r}
+df[4806, ]
+```
+
+```{r}
+df[5228, ]
+```
+Los eliminamos
+
+```{r}
+remover <- which(is.na(df))
+df <- df[-remover, ]
+```
+
+
+### Alternativa 2 para ver los NA
+
+### Casos completos
+vemos los incompletos
+```{r}
+df %>%
+  filter(!complete.cases(.))
+```
+
+
