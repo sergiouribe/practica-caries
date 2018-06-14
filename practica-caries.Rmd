@@ -4,37 +4,37 @@ output: html_notebook
 ---
 
 # Paquetes
-```{r}
+```{r paquetes}
 library(tidyverse)
-library(table1)
+library(tableone)
 
 ```
 
 # Importar datos
 
 Convertir a csv e importarlo
-```{r}
+```{r read_csv}
 df <- read_csv("caries.csv")
 ```
 Importar directamente desde excel
-```{r}
+```{r readxls}
 df <- readxl::read_xls("caries.xls", sheet = 1)
 ```
 
 Leer desde un sitio web
 
-```{r}
+```{r read url}
 df <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vStv7Pr69DtRKv6Nw6gVBep8hbT3pEeO6B1vNwxK_1DUHgpoTgbuRpZ4SvgtHFQnBZJVGeeQVyRuXZl/pub?gid=1416215037&single=true&output=csv")
 ```
 
 # Explorar los datos
 
-```{r}
+```{r names}
 names(df)
 ```
 
 
-```{r}
+```{r estructura}
 str(df)
 ```
 ## ver datos NA
@@ -42,9 +42,13 @@ str(df)
 ```{r}
 sum(is.na(df))
 ```
-hay dos datos NA
+hay dos datos NA, ¿cuáles?
 ```{r}
 which(is.na(df))
+```
+
+```{r}
+na.exclude(df)
 ```
 
 accedemos a esos datos
@@ -57,19 +61,53 @@ df[5228, ]
 ```
 Los eliminamos
 
-```{r}
-remover <- which(is.na(df))
-df <- df[-remover, ]
+```{r omit.na}
+df_clean <- na.omit(df)
 ```
 
+Ahora comprobamos
 
-### Alternativa 2 para ver los NA
-
-### Casos completos
-vemos los incompletos
 ```{r}
-df %>%
-  filter(!complete.cases(.))
+sum(is.na(df_clean))
+```
+ok
+
+# Análisis exploratorio de datos
+```{r}
+names(df_clean)
 ```
 
+```{r}
+summary(df_clean)
+```
 
+```{r}
+str(df_clean)
+```
+
+para simplificar todo, voy a limpiar los nombres con el paquete JANITOR
+```{r}
+df <- clean <- df_clean %>%
+  janitor::clean_names()
+```
+
+Veo 
+Convierto variables categoricas
+```{r}
+df_clean$`estr1to se3` <- as.factor(df_clean$`estr1to se3`)
+df$colegio <- as.factor(df$colegio)
+
+str(df_clean)
+```
+
+factor
+```{r}
+names(df_clean)
+```
+
+```{r}
+factores <- c(3, 4, 6, 8, 17, 18 )
+df_clean[,factores] <- lapply(df_clean[,factores] , factor)
+rm(factores)
+str(df_clean)
+```
