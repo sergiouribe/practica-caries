@@ -73,39 +73,27 @@ sum(is.na(df_clean))
 ok
 
 # Análisis exploratorio de datos
-```{r}
+```{r names nuevamente}
 names(df_clean)
 ```
 
-```{r}
+```{r resumen de datos}
 summary(df_clean)
 ```
 
-```{r}
+```{r estructura de datos}
 str(df_clean)
 ```
 
-para simplificar todo, voy a limpiar los nombres con el paquete JANITOR
-```{r}
-df <- clean <- df_clean %>%
-  janitor::clean_names()
-```
 
-Veo 
+
 Convierto variables categoricas
-```{r}
-df_clean$`estr1to se3` <- as.factor(df_clean$`estr1to se3`)
-df$colegio <- as.factor(df$colegio)
 
-str(df_clean)
-```
-
-factor
-```{r}
+```{r chequeo los nombres}
 names(df_clean)
 ```
 
-```{r}
+```{r convierto a factores}
 factores <- c(3, 4, 6, 8, 17, 18 )
 df_clean[,factores] <- lapply(df_clean[,factores] , factor)
 rm(factores)
